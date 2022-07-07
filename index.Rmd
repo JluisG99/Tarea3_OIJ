@@ -128,7 +128,7 @@ cantones_delitos <-
 # Paleta de colores para los mapas
 
 colores_cantones_delitos <-
-  colorNumeric(palette = "Reds",
+  colorNumeric(palette = "Blues",
                domain = cantones_delitos$delitos,
                na.color = "transparent")
 
@@ -212,7 +212,7 @@ Est_pol %>%
   datatable(colnames = c(
     "Delito",
     "Fecha",
-    "Víctima",
+    "Victima",
     "Edad",
     "Género",
     "Provincia",
@@ -227,17 +227,19 @@ Column {data-width=450}
 
 ```{r Cantidad de delitos por tipo de victima}
 Delitos_victimas <-
-Est_pol %>%
-  count(Delito) %>%
-  ggplot(aes(x = reorder(Delito, n), y = n)) + 
+  Est_pol %>%
+  dplyr::select(Delito, Victima) %>%
+  count(Victima) %>%
+  #ggplot(aes(x = Delito, y = Victima)) +
+  ggplot(aes(x = reorder(Victima, n), y = n)) +
   geom_bar(stat = "identity") +
-  scale_fill_grey() +
-coord_flip() +
-ggtitle("Cantidad de delitos por tipo de victima") + 
-  xlab("Tipo de delito") + 
-  ylab("Victima") + 
+  coord_flip() +
+  ggtitle("Cantidad de delitos por tipo de victima") +
+  xlab("Tipo de delito") +
+  ylab("Victima") +
   theme_minimal()
-ggplotly(Delitos_victimas) %>% 
+
+ggplotly(Delitos_victimas) %>%
   config(locale = 'es')
 ```
 
