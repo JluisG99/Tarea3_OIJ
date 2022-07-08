@@ -34,7 +34,7 @@ Column {data-width=650}
 ### Presentación del proyecto:
 
                                          
-            Desarrollo de un tablero de control con mapas, tablas y gráficos interactivos con estadísticas del (OIJ) en R 
+        Desarrollo de un tablero de control con mapas, tablas y gráficos interactivos con las estadísticas del (OIJ) del 2021 en R 
                                          
                                        
                                        Universidad de Costa Rica, escuela de Geografía 
