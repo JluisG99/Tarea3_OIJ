@@ -1,5 +1,5 @@
 ---
-title: "Análisis espacial de los delitos en Costa Rica; generación de un Dashboard interactivo"
+title: "Visualización de estadísticas y un mapa de los delitos en Costa Rica; generación de un Dashboard interactivo con datos del OIJ del 2021"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
@@ -27,8 +27,67 @@ library(flexdashboard)
 library(stringi)
 
 ```
+Página 1
+===============================================================
+Column {data-width=650}
+-----------------------------------------------------------------------
+### Presentación del proyecto:
 
-Página 1 
+                                         
+            Desarrollo de un tablero de control con mapas, tablas y gráficos interactivos con estadísticas del (OIJ) en R 
+                                         
+                                       
+                                       Universidad de Costa Rica, escuela de Geografía 
+                                         
+                                         
+                                         
+                      
+                                            GF-0604 Procesamiento de datos geográficos 
+                                            
+                                            
+                                            
+                                            
+                                            
+                                              
+                                                 Jose Luis Gamboa Mora | B78769 
+                                                 
+                                                 
+                              
+                    
+                                      
+                         
+                                                 Profesor: Manuel Vargas del Valle 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                 
+                                                           I Ciclo - 2022 
+                                           
+                                           
+                                           
+
+Row {.tabset .tabset-fade}
+----------------------------------------------------------------------------
+### Indicaciones de Uso
+* Navegue entre las páginas 1, 2 y 3 para observar los diferentes segmentos del producto.
+
+* Es importante que sepa utilizar los **tabsets** presentes en la página 1 y 2; presionando sobre los subtítulos que se muestran en la parte superior de la página, se puede navegar entre los diferentes productos. 
+
+* En la página 2, ver el mapa, tablas y los gráfico generados con datos del [INEC](https://www.inec.cr/) y del [OIJ](https://sitiooij.poder-judicial.go.cr/)
+
+* Se presenta un mapa interactivo que representa la cantidad de delitos por cantón, ahí podrás hacer zoom con los botones __+__ y __-__ , además, para activar y desactivar la capa del mapa de coropletas se debe ir al **control de capas** que se encuentra en la _esquina superior_ derecha del mapa y una **leyenda** en la _esquina inferior izquierda_. Además, al hacer un _clic_ sobre cualquier punto del mapa se __desplegará__ información referente al cantón sobre el cual se ejecutó el clic. 
+
+* Por otra parte, la tabla y los gráficos cuentan con diferentes **botones** y un **scroll** que permite interactuar con los datos presentados. 
+
+### Introducción: 
+Este informe científico pretende generar un _tablero de control_, que permita visualizar tablas, gráficos y mapas interactivos generados con: 
+
+1. Las [estadisticaspoliciales2021.xls](https://gf0604-procesamientodatosgeograficos.github.io/2022-i/datos/oij/estadisticas-policiales/estadisticaspoliciales2021.xls), que proviene de la [página web del Organismo de Investigación Judicial (OIJ)](https://sitiooij.poder-judicial.go.cr/index.php/ayuda/servicios-policiales/servicios-a-organizaciones/indice-de-transparencia-del-sector-publico-costarricense/datos-abiertos) 
+
+2. Y un archivo geoespacial de la delimitación político administrativa [cantones_simplificados.geojson](https://gf0604-procesamientodatosgeograficos.github.io/2022-i/datos/ign/delimitacion-territorial-administrativa/cantones_simplificados.geojson), que proviene de un [geoservicio de tipo Web Feature Service (WFS)](https://www.snitcr.go.cr/ico_servicios_ogc_info?k=bm9kbzo6MjY=&nombre=IGN%20Cartograf%C3%ADa%201:5mil), del SNIT. 
+
+Página 2
 ===============================================================
 
 ```{r carga de datos}
@@ -47,9 +106,9 @@ cantones <-
 Column {data-width=550}
 -----------------------------------------------------------------------
 
-### Incidencia del crimen en los cantones de Costa Rica
+### Mapa Coroplético que muestra la cantidad de delitos en diferentes cantones de Costa Rica
 
-```{r generación del mapa}
+```{r generación del mapa, message=FALSE}
 # En el data frame de cantones
 cantones <-
   cantones %>%
@@ -178,10 +237,10 @@ leaflet() %>%
 
 ```
 
-Column {data-width=450}
------------------------------------------------------------------------
+Row {.tabset .tabset-fade}
+----------------------------------------------------------------------------
 
-### Cantidad de delitos por tipo de delito
+### **Cantidad de delitos por tipo de delito en Costa Rica, 2021**
 
 ```{r Gráfico de la cantidad de delitos por tipo de delito}
 Delitos <-
@@ -198,13 +257,8 @@ ggplotly(Delitos) %>%
   config(locale = 'es')
 ```
 
-Página 2 
-===============================================================
 
-Column {data-width=550}
------------------------------------------------------------------------
-
-### Chart B: DT interactiva de las estadísticas policiales registradas por el (OIJ) en el 2021:
+### **Tabla interactiva de las estadísticas policiales registradas por el (OIJ) en el 2021**
 
 ```{r }
 Est_pol %>%
@@ -212,7 +266,7 @@ Est_pol %>%
   datatable(colnames = c(
     "Delito",
     "Fecha",
-    "Victima",
+    "Víctima",
     "Edad",
     "Género",
     "Provincia",
@@ -221,9 +275,7 @@ Est_pol %>%
 
 ```
 
-Column {data-width=450}
------------------------------------------------------------------------
-### Cantidad de delitos por tipo de victima
+### **Cantidad de delitos por tipo de victima**
 
 ```{r Cantidad de delitos por tipo de victima}
 Delitos_victimas <-
@@ -234,21 +286,16 @@ Delitos_victimas <-
   ggplot(aes(x = reorder(Victima, n), y = n)) +
   geom_bar(stat = "identity") +
   coord_flip() +
-  ggtitle("Cantidad de delitos por tipo de victima") +
+  ggtitle("Cantidad de delitos por tipo de víctima") +
   xlab("Tipo de delito") +
-  ylab("Victima") +
+  ylab("Víctima") +
   theme_minimal()
 
 ggplotly(Delitos_victimas) %>%
   config(locale = 'es')
 ```
 
-Página 3 
-===============================================================
-
-Column {data-width=350}
------------------------------------------------------------------------
-### Delitos cometidos por mes del 2021 en Costa Rica
+### **Cantidad de delitos registrados por el OIJ, de Enero a Noviembre del 2021 en Costa Rica**
 
 ```{r}
 Del_mes <- Est_pol %>%
@@ -269,9 +316,8 @@ ggplotly(graph2) %>%
   config(locale = 'es')
 ```
 
-Column {data-width=650}
------------------------------------------------------------------------
-### Proporción de la ocurrencia de delitos por género en Costa Rica (2021)
+
+### **Proporción de la ocurrencia de delitos por género en Costa Rica, registrado por el OIJ (2021)**
 
 ```{r}
 Propor_gen <- Est_pol %>%
@@ -292,4 +338,17 @@ Apiladas_propor_genero <-
 
 ggplotly(Apiladas_propor_genero) %>% config(locale = 'es')
 ```
+
+Página 3
+===============================================================
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+### Conclusiones:
+
+Considero importante concluir que este tipo de visualizaciones web mediante dashboards del paquete _FlexDashboard_ de __R__, es una herramienta que enriquece el conocimiento científico y permite generar un abanico de posibilidades para el uso de estas tecnologías en diferentes temáticas de la Geografía. 
+
+Además, la funcionalidad del paquete ggplotly para la interctividad de los gráficos y los mapas leaflet permiten que el desarrollador capture la atención de su público  meta. 
+
+
 
