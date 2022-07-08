@@ -76,7 +76,7 @@ Row {.tabset .tabset-fade}
 
 * En la página 2, ver el mapa, tablas y los gráfico generados con datos del [INEC](https://www.inec.cr/) y del [OIJ](https://sitiooij.poder-judicial.go.cr/)
 
-* Se presenta un mapa interactivo que representa la cantidad de delitos por cantón, ahí podrás hacer zoom con los botones __+__ y __-__ , además, para activar y desactivar la capa del mapa de coropletas se debe ir al **control de capas** que se encuentra en la _esquina superior_ derecha del mapa y una **leyenda** en la _esquina inferior izquierda_. Además, al hacer un _clic_ sobre cualquier punto del mapa se __desplegará__ información referente al cantón sobre el cual se ejecutó el clic. 
+* Se presenta un mapa interactivo que representa la cantidad de delitos por cantón, ahí podrás hacer zoom con los botones __"+"__ y **"-"** , además, para activar y desactivar la capa del mapa de coropletas se debe ir al **control de capas** que se encuentra en la _esquina superior_ derecha del mapa y una **leyenda** en la _esquina inferior izquierda_. Además, al hacer un _clic_ sobre cualquier punto del mapa se __desplegará__ información referente al cantón sobre el cual se ejecutó el clic. 
 
 * Por otra parte, la tabla y los gráficos cuentan con diferentes **botones** y un **scroll** que permite interactuar con los datos presentados. 
 
@@ -239,6 +239,22 @@ leaflet() %>%
 
 Row {.tabset .tabset-fade}
 ----------------------------------------------------------------------------
+### **Tabla interactiva de las estadísticas policiales registradas por el (OIJ) en el 2021**
+
+```{r }
+Est_pol %>%
+  dplyr::select(Delito, Fecha, Victima, Edad, Genero, Provincia, Canton) %>%
+  datatable(colnames = c(
+    "Delito",
+    "Fecha",
+    "Víctima",
+    "Edad",
+    "Género",
+    "Provincia",
+    "Cantón"
+  ), options = list(pageLength = 5, language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')))
+
+```
 
 ### **Cantidad de delitos por tipo de delito en Costa Rica, 2021**
 
@@ -258,24 +274,7 @@ ggplotly(Delitos) %>%
 ```
 
 
-### **Tabla interactiva de las estadísticas policiales registradas por el (OIJ) en el 2021**
-
-```{r }
-Est_pol %>%
-  dplyr::select(Delito, Fecha, Victima, Edad, Genero, Provincia, Canton) %>%
-  datatable(colnames = c(
-    "Delito",
-    "Fecha",
-    "Víctima",
-    "Edad",
-    "Género",
-    "Provincia",
-    "Cantón"
-  ), options = list(pageLength = 5, language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')))
-
-```
-
-### **Cantidad de delitos por tipo de victima**
+### **Cantidad de delitos por tipo de víctima**
 
 ```{r Cantidad de delitos por tipo de victima}
 Delitos_victimas <-
@@ -317,7 +316,7 @@ ggplotly(graph2) %>%
 ```
 
 
-### **Proporción de la ocurrencia de delitos por género en Costa Rica, registrado por el OIJ (2021)**
+### **Proporción de la ocurrencia de delitos por género en Costa Rica, registrados por el OIJ en el 2021**
 
 ```{r}
 Propor_gen <- Est_pol %>%
